@@ -9,6 +9,7 @@ interface User {
   lotteryNumber: string;
   name: string;
   class: string;
+  link: string;
 }
 
 // API URL
@@ -16,7 +17,7 @@ const apiUrl = "https://675ad58c9ce247eb1934befa.mockapi.io/lottery";
 
 export default function ThreeColumnTable() {
   const [users, setUsers] = useState<User[]>([]);  // Array of users
-  const [newUser, setNewUser] = useState<User>({ id: "", lotteryNumber: "", name: "", class: "" });  // New user form
+  const [newUser, setNewUser] = useState<User>({ id: "", lotteryNumber: "", name: "", class: "", link: "" });  // New user form
   const [isModalOpen, setIsModalOpen] = useState(false);  // Modal open state
   const [filter, setFilter] = useState("");  // State for filter input
 
@@ -47,7 +48,7 @@ export default function ThreeColumnTable() {
       const newUserData = await response.json();
 
       setUsers((prevUsers) => [...prevUsers, newUserData]);  // Update the local state with the new user
-      setNewUser({ id: "", lotteryNumber: "", name: "", class: "" });  // Reset form
+      setNewUser({ id: "", lotteryNumber: "", name: "", class: "", link: "" });  // Reset form
       setIsModalOpen(false);  // Close modal
     }
   };
@@ -100,6 +101,7 @@ export default function ThreeColumnTable() {
                 <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Số Vé</TableHead>
                 <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Người Sở Hữu</TableHead>
                 <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Lớp</TableHead>
+                <TableHead className="px-6 py-4 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">Facebook</TableHead>
                 <TableHead className="px-6 py-4"></TableHead>
               </TableRow>
             </TableHeader>
@@ -110,6 +112,12 @@ export default function ThreeColumnTable() {
                   </TableCell>
                   <TableCell className="px-6 py-4">{user.name}</TableCell>
                   <TableCell className="px-6 py-4">{user.class}</TableCell>
+                  <TableCell className="px-6 py-4">
+                    <a href={user.link} target="_blank" rel="noopener noreferrer">
+                      {user.link}
+                    </a>
+                  </TableCell>
+
                   <TableCell className="px-6 py-4">
                     <button
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
@@ -168,6 +176,18 @@ export default function ThreeColumnTable() {
                   className="w-full px-4 py-3 border border-yellow-400 bg-yellow-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
                   value={newUser.class}
                   onChange={(e) => setNewUser({ ...newUser, class: e.target.value })}
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-yellow-800 font-semibold mb-2" htmlFor="link">
+                  Facebook
+                </label>
+                <input
+                  type="link"
+                  id="link"
+                  className="w-full px-4 py-3 border border-yellow-400 bg-yellow-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+                  value={newUser.link}
+                  onChange={(e) => setNewUser({ ...newUser, link: e.target.value })}
                 />
               </div>
               <div className="flex justify-end">
