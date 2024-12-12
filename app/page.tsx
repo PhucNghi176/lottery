@@ -1,101 +1,142 @@
-import Image from "next/image";
+'use client';
+import { useState } from "react";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export default function Home() {
+// Sample data with new structure
+const initialUsers = [
+  { id: 1, LotteryNumber: "1", Owner: "Test", Class: "12A" },
+  { id: 2, LotteryNumber: "2", Owner: "Test", Class: "12B" },
+  { id: 3, LotteryNumber: "3", Owner: "Test", Class: "12A" },
+  { id: 4, LotteryNumber: "4", Owner: "Test", Class: "12C" },
+  { id: 5, LotteryNumber: "5", Owner: "Test", Class: "12B" },
+];
+
+export default function ThreeColumnTable() {
+  const [users, setUsers] = useState(initialUsers);
+  const [newUser, setNewUser] = useState({ LotteryNumber: "", Owner: "", Class: "" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filter, setFilter] = useState(""); // State for the filter input
+
+  // Handle the Add User form submission
+  const handleAddUser = () => {
+    if (newUser.LotteryNumber && newUser.Owner && newUser.Class) {
+      const newId = users.length + 1;  // Unique ID based on the length of users
+      const addedUser = { id: newId, ...newUser };
+      setUsers([...users, addedUser]);
+      setNewUser({ LotteryNumber: "", Owner: "", Class: "" });  // Reset form
+      setIsModalOpen(false);  // Close modal
+    }
+  };
+
+  // Handle the Delete User functionality
+  const handleDeleteUser = (id: number) => {
+    const updatedUsers = users.filter(user => user.id !== id);
+    setUsers(updatedUsers);
+  };
+
+  // Filter users based on LotteryNumber
+  const filteredUsers = users.filter(user => user.LotteryNumber.includes(filter));
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="container mx-auto py-10">
+      <div className="flex justify-between mb-4">
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Thêm Vé Số
+        </button>
+        
+        {/* Filter Input */}
+        <div className="flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Filter by Lottery Number"
+            className="p-2 border border-gray-300 rounded-lg"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}  // Update filter state on input change
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      <Table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <TableCaption></TableCaption>
+        <TableHeader className="bg-gray-100">
+          <TableRow>
+            <TableHead className="w-[100px] px-6 py-3 text-left text-sm font-medium text-gray-500">Lottery Number</TableHead>
+            <TableHead className="px-6 py-3 text-left text-sm font-medium text-gray-500">Owner</TableHead>
+            <TableHead className="px-6 py-3 text-left text-sm font-medium text-gray-500">Class</TableHead>
+            <TableHead className="px-6 py-3 text-left text-sm font-medium text-gray-500">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredUsers.map((user) => (
+            <TableRow key={user.id} className="hover:bg-gray-50 transition-colors duration-200">
+              <TableCell className="px-6 py-3 text-sm text-gray-800 font-medium">{user.LotteryNumber}</TableCell>
+              <TableCell className="px-6 py-3 text-sm text-gray-800">{user.Owner}</TableCell>
+              <TableCell className="px-6 py-3 text-sm text-gray-800">{user.Class}</TableCell>
+              <TableCell className="px-6 py-3 text-sm text-gray-800">
+                <button
+                  className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  onClick={() => handleDeleteUser(user.id)}
+                >
+                  Delete
+                </button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Modal for Adding User */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold text-gray-700 mb-4">Add New User</h2>
+            <div className="mb-4">
+              <label className="block text-gray-600 mb-2">Lottery Number</label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                value={newUser.LotteryNumber}
+                onChange={(e) => setNewUser({ ...newUser, LotteryNumber: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-600 mb-2">Owner</label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                value={newUser.Owner}
+                onChange={(e) => setNewUser({ ...newUser, Owner: e.target.value })}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-600 mb-2">Class</label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                value={newUser.Class}
+                onChange={(e) => setNewUser({ ...newUser, Class: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg mr-2 hover:bg-gray-600"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                onClick={handleAddUser}
+              >
+                Add User
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
