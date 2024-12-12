@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import thantai from "@/public/z6123997477704_ef40a949fd1bb170c4413b48ddfc6543.gif";
-import meothantai from "@/public/pngtree-2020-new-year-god-of-wealth-cartoon-cute-gif-element-png-image_6678268.jpg"
 // Define TypeScript types for user data
 interface User {
   id: string;
